@@ -5,6 +5,7 @@ import StarWarsSearchContext from './StarWarsSearchContext';
 
 function StarWarsSearchProvider({ children }) {
   const [data, setData] = useState([]);
+  const [filterByName, setFilterByName] = useState({ name: '' });
 
   useEffect(() => {
     const requestApi = async () => {
@@ -14,8 +15,13 @@ function StarWarsSearchProvider({ children }) {
     requestApi();
   }, []);
 
+  const filterPlanetName = filterByName.name !== ''
+    ? data.filter((filter) => filter.name.includes(filterByName.name)) : data;
+
   return (
-    <StarWarsSearchContext.Provider value={ data }>
+    <StarWarsSearchContext.Provider
+      value={ { data, setFilterByName, filterByName, filterPlanetName } }
+    >
       {children}
     </StarWarsSearchContext.Provider>
   );
