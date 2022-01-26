@@ -20,7 +20,7 @@ function StarWarsSearchProvider({ children }) {
 
   return (
     <StarWarsSearchContext.Provider
-      value={ { data, setFilterByName, filterByName, filterPlanetName } }
+      value={ { setFilterByName, filterByName, filterPlanetName } }
     >
       {children}
     </StarWarsSearchContext.Provider>

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
-import Button from '../Button/Button';
+import { Col, Form, Row, Button } from 'react-bootstrap';
 
 function FormHeader() {
   return (
@@ -25,7 +24,7 @@ function FormHeader() {
           <Form.Control type="number" />
         </Col>
         <Col xs lg="2">
-          <Button variant="primary">Filtrar</Button>
+          <Button variant="light">Filtrar</Button>
         </Col>
       </Row>
       <Row className="align-items-center mb-3">
