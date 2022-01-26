@@ -62,7 +62,7 @@ function FormHeader() {
           </Form.Select>
         </Col>
         <Col>
-          <select
+          <Form.Select
             data-testid="comparison-filter"
             name="comparison"
             onChange={ handleChangeFilter }
@@ -70,7 +70,7 @@ function FormHeader() {
             <option value="maior que">maior que</option>
             <option value="menor que">menor que</option>
             <option value="igual a">igual a</option>
-          </select>
+          </Form.Select>
         </Col>
         <Col>
           <input
