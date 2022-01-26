@@ -1,11 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
 import StarWarsSearchContext from '../../context/StarWarsSearchContext';
 
 import './Table.css';
 
 function TableB() {
-  const { filterPlanetName } = useContext(StarWarsSearchContext);
+  const { filterPlanetName, fiteredDataColumn } = useContext(StarWarsSearchContext);
+  const [getDataForRender, setGetDataForRender] = useState([]);
+
+  useEffect(() => {
+    const setRenderData = () => {
+      if (fiteredDataColumn.length > 0) {
+        return fiteredDataColumn;
+      }
+      return filterPlanetName;
+    };
+
+    setGetDataForRender(setRenderData());
+  }, [filterPlanetName, fiteredDataColumn]);
 
   return (
     <Table striped bordered hover variant="dark">
@@ -18,15 +30,15 @@ function TableB() {
                   key={ index }
                   className="tableB-thead"
                 >
-                  {planet.split('_').join('')}
+                  {planet.split('_').join(' ')}
 
                 </th>
               )) : (<th>Loading</th>)}
         </tr>
       </thead>
       <tbody>
-        { filterPlanetName.length > 0
-          ? filterPlanetName.map((planet) => (
+        { getDataForRender.length > 0
+          ? getDataForRender.map((planet) => (
             <tr key={ planet.orbital_period }>
               <td>{planet.name}</td>
               <td>{planet.rotation_period}</td>

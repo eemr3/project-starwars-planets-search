@@ -6,6 +6,40 @@ import StarWarsSearchContext from './StarWarsSearchContext';
 function StarWarsSearchProvider({ children }) {
   const [data, setData] = useState([]);
   const [filterByName, setFilterByName] = useState({ name: '' });
+  const [filterByNumericValues, setFilterByNumericValues] = useState([]);
+  const [fiteredDataColumn, setFilteredColumn] = useState([]);
+  const [getValueColumn, setGetValueColumn] = useState('');
+
+  const filterPlanetName = filterByName.name !== ''
+    ? data.filter((filter) => filter.name.includes(filterByName.name)) : data;
+
+  useEffect(() => {
+    const handleFilterLength = () => {
+      switch (getValueColumn) {
+      case 'maior que': {
+        const resultFiltered = data.filter((planet) => filterByNumericValues
+          .filter((filter) => Number(planet[filter.column]) > Number(filter.value))
+          .length);
+        return setFilteredColumn(resultFiltered);
+      }
+      case 'menor que': {
+        const resultPopulationMenor = data.filter((planet) => filterByNumericValues
+          .filter((filter) => Number(planet[filter.column]) < Number(filter.value))
+          .length);
+        return setFilteredColumn(resultPopulationMenor);
+      }
+      case 'igual a': {
+        const resultPopulationIgual = data.filter((planet) => filterByNumericValues
+          .filter((filter) => Number(planet[filter.column]) === Number(filter.value))
+          .length);
+        return setFilteredColumn(resultPopulationIgual);
+      }
+      default:
+        return data;
+      }
+    };
+    handleFilterLength();
+  }, [data, filterByNumericValues, getValueColumn]);
 
   useEffect(() => {
     const requestApi = async () => {
@@ -15,12 +49,19 @@ function StarWarsSearchProvider({ children }) {
     requestApi();
   }, []);
 
-  const filterPlanetName = filterByName.name !== ''
-    ? data.filter((filter) => filter.name.includes(filterByName.name)) : data;
+  const passDataProvide = {
+    setFilterByName,
+    filterByName,
+    filterPlanetName,
+    filterByNumericValues,
+    setFilterByNumericValues,
+    setGetValueColumn,
+    fiteredDataColumn,
+  };
 
   return (
     <StarWarsSearchContext.Provider
-      value={ { setFilterByName, filterByName, filterPlanetName } }
+      value={ passDataProvide }
     >
       {children}
     </StarWarsSearchContext.Provider>
