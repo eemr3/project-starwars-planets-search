@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Col, Form, Row, Button } from 'react-bootstrap';
 import StarWarsSearchContext from '../../context/StarWarsSearchContext';
 
@@ -6,16 +6,16 @@ function FormHeader() {
   const {
     filterByNumericValues: { value },
     setFilterByNumericValues,
-    setGetValueColumn,
+    optionsColunm,
+    setOptionsColunm,
+    setCountIndex,
+    countIndex,
   } = useContext(StarWarsSearchContext);
   const [addFilter, setAddFilter] = useState({
     column: 'population',
     comparison: 'maior que',
     value: '0',
   });
-
-  const [optionsColunm, setOptionsColunm] = useState([
-    'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water']);
 
   const handleChangeFilter = ({ target }) => {
     const { name } = target;
@@ -26,18 +26,25 @@ function FormHeader() {
   };
 
   const handleFilterColumn = (colum) => {
-    const teste = optionsColunm.filter((col) => col !== colum);
-    setOptionsColunm(teste);
+    const updateColumn = optionsColunm.filter((col) => col !== colum);
+    setOptionsColunm(updateColumn);
   };
 
   const handleClickAdd = () => {
     setFilterByNumericValues((prev) => ([
       ...prev, addFilter,
     ]));
-    console.log(addFilter.column);
     handleFilterColumn(addFilter.column);
-    setGetValueColumn(addFilter.comparison);
+    setCountIndex(countIndex + 1);
   };
+
+  useEffect(() => {
+    setAddFilter({
+      column: optionsColunm[0],
+      comparison: 'maior que',
+      value: '0',
+    });
+  }, [optionsColunm]);
 
   return (
     <Form>
@@ -65,6 +72,7 @@ function FormHeader() {
           <Form.Select
             data-testid="comparison-filter"
             name="comparison"
+            value={ addFilter.comparison }
             onChange={ handleChangeFilter }
           >
             <option value="maior que">maior que</option>
@@ -87,6 +95,8 @@ function FormHeader() {
             variant="light"
             data-testid="button-filter"
             onClick={ handleClickAdd }
+            disabled={ optionsColunm.length === 0 }
+            type="button"
           >
             Filtrar
 
