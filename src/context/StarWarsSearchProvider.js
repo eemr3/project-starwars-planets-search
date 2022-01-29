@@ -8,8 +8,13 @@ function StarWarsSearchProvider({ children }) {
   const [filterByName, setFilterByName] = useState({ name: '' });
   const [filterByNumericValues, setFilterByNumericValues] = useState([]);
   const [fiteredDataColumn, setFilteredColumn] = useState([]);
+  const [orderDataColumn, setOrderDataColumn] = useState([]);
   const [countIndex, setCountIndex] = useState(0);
-  // const [getValueColumn, setGetValueColumn] = useState('');
+  const [order, setOrder] = useState({
+    column: 'population',
+    sort: 'ASC',
+  });
+
   const [optionsColunm, setOptionsColunm] = useState(optionsArray);
 
   const filterPlanetName = filterByName.name !== ''
@@ -56,6 +61,11 @@ function StarWarsSearchProvider({ children }) {
     setOptionsColunm,
     setCountIndex,
     countIndex,
+    order,
+    setOrder,
+    orderDataColumn,
+    setOrderDataColumn,
+    data,
   };
 
   return (

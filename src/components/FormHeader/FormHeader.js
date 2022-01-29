@@ -10,6 +10,10 @@ function FormHeader() {
     setOptionsColunm,
     setCountIndex,
     countIndex,
+    order,
+    setOrder,
+    setOrderDataColumn,
+    data,
   } = useContext(StarWarsSearchContext);
   const [addFilter, setAddFilter] = useState({
     column: 'population',
@@ -25,6 +29,14 @@ function FormHeader() {
     });
   };
 
+  const handleCheckRadioAndSelect = ({ target }) => {
+    const { name } = target;
+    setOrder({
+      ...order,
+      [name]: target.value,
+    });
+  };
+
   const handleFilterColumn = (colum) => {
     const updateColumn = optionsColunm.filter((col) => col !== colum);
     setOptionsColunm(updateColumn);
@@ -36,6 +48,19 @@ function FormHeader() {
     ]));
     handleFilterColumn(addFilter.column);
     setCountIndex(countIndex + 1);
+  };
+
+  const handleClickSort = () => {
+    if (order.sort === 'ASC') {
+      setOrderDataColumn(data
+        .sort((columnA, columnB) => Number(columnA[order.column])
+         - Number(columnB[order.column])));
+    }
+    if (order.sort === 'DESC') {
+      setOrderDataColumn(data
+        .sort((columnA, columnB) => Number(columnB[order.column])
+         - Number(columnA[order.column])));
+    }
   };
 
   useEffect(() => {
@@ -110,30 +135,49 @@ function FormHeader() {
           <Form.Select
             id="order-option"
             aria-label="Default select example"
+            data-testid="column-sort"
+            name="column"
+            onChange={ handleCheckRadioAndSelect }
           >
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+            {optionsColunm.map((item) => (
+              <option key={ item } value={ item }>{item}</option>
+
+            ))}
           </Form.Select>
         </Col>
         <Col>
-          <Form.Label htmlFor="custom-switch"> </Form.Label>
+          <Form.Label htmlFor="asc"> </Form.Label>
           <Form.Check
-            type="switch"
-            id="custom-switch"
+            id="asc"
+            name="sort"
+            value="ASC"
+            type="radio"
             label="Ascendente"
+            data-testid="column-sort-input-asc"
+            onChange={ handleCheckRadioAndSelect }
           />
         </Col>
         <Col>
-          <Form.Label htmlFor="custom-switch"> </Form.Label>
+          <Form.Label htmlFor="desc"> </Form.Label>
           <Form.Check
-            type="switch"
-            id="custom-switch"
+            id="desc"
+            name="sort"
+            value="DESC"
+            type="radio"
             label="Descendente"
+            data-testid="column-sort-input-desc"
+            onChange={ handleCheckRadioAndSelect }
           />
         </Col>
         <Col xs lg="2">
-          <Button variant="light">Ordenar</Button>
+          <Button
+            onClick={ handleClickSort }
+            variant="light"
+            data-testid="column-sort-button"
+          >
+            Ordenar
+
+          </Button>
         </Col>
         <Col xs lg="2" />
       </Row>

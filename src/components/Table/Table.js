@@ -5,7 +5,8 @@ import StarWarsSearchContext from '../../context/StarWarsSearchContext';
 import './Table.css';
 
 function TableB() {
-  const { filterPlanetName, fiteredDataColumn } = useContext(StarWarsSearchContext);
+  const { filterPlanetName,
+    fiteredDataColumn, orderDataColumn } = useContext(StarWarsSearchContext);
   const [getDataForRender, setGetDataForRender] = useState([]);
 
   useEffect(() => {
@@ -13,11 +14,15 @@ function TableB() {
       if (fiteredDataColumn.length > 0) {
         return fiteredDataColumn;
       }
-      return filterPlanetName;
+      if (orderDataColumn.length > 0) {
+        return orderDataColumn;
+      }
+      return filterPlanetName.sort((columnA, columnB) => (
+        +(columnA.name > columnB.name) || +(columnA.name > columnB.name) - 1));
     };
 
     setGetDataForRender(setRenderData());
-  }, [filterPlanetName, fiteredDataColumn]);
+  }, [filterPlanetName, fiteredDataColumn, orderDataColumn]);
 
   return (
     <Table striped bordered hover variant="dark">
@@ -40,7 +45,7 @@ function TableB() {
         { getDataForRender.length > 0
           ? getDataForRender.map((planet) => (
             <tr key={ planet.orbital_period }>
-              <td>{planet.name}</td>
+              <td data-testid="planet-name">{planet.name}</td>
               <td>{planet.rotation_period}</td>
               <td>{planet.orbital_period}</td>
               <td>{planet.diameter}</td>
